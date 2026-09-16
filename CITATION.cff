@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+title: "Industry 5.0 multi-robot scalability: code and data"
+message: "If you use this software or data, please cite both the software and the article."
+type: software
+authors:
+  - family-names: Urrea
+    given-names: Claudio
+    orcid: "https://orcid.org/0000-0001-7197-8928"
+    affiliation: "Electrical Engineering Department, University of Santiago of Chile"
+    email: claudio.urrea@usach.cl
+repository-code: "https://github.com/ClaudioUrrea/Industry50-MultiRobot-Scalability"
+identifiers:
+  - type: doi
+    value: 10.6084/m9.figshare.33090107
+    description: Data deposit
+license: MIT
+keywords:
+  - collaborative robots
+  - Industry 5.0
+  - multi-robot coordination
+  - digital twin
+  - scalability
+  - simulation
+preferred-citation:
+  type: article
+  title: "Simulation-Based Scalability Assessment of Multi-Robot Industry 5.0 Human-Centric Cells: Coordination-Efficiency Modeling, Bottleneck Identification, and Triple-Bottom-Line Screening in a Physics-Based Digital Twin"
+  authors:
+    - family-names: Urrea
+      given-names: Claudio
+      orcid: "https://orcid.org/0000-0001-7197-8928"
+  journal: "IEEE Access"
+  year: 2026

@@ -1,0 +1,6 @@
+N,throughput_units_per_shift,efficiency_pct,marginal_gain_units,workspace_utilisation_pct,computation_ms,complexity
+1,307,100.0,,72,8.3,Low
+2,554,90.3,247,85,9.7,Low
+3,802,87.1,248,78,11.4,Medium
+4,963,78.4,161,67,14.2,High
+5,1047,68.2,84,62,16.8,High

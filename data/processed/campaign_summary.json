@@ -1,0 +1,61 @@
+{
+  "single_realisation": {
+    "seed": 42,
+    "shifts": 60,
+    "stations": 3,
+    "operator_hours": 1440,
+    "cell_hours": 480,
+    "throughput_units_per_shift": 547,
+    "defect_rate_pct": 0.8,
+    "uptime_pct": 96.5,
+    "energy_kwh": 32.7,
+    "separation_violations": 0,
+    "min_separation_m": 0.18,
+    "availability_decomposition": {
+      "equipment": 0.8,
+      "network": 1.2,
+      "operator": 0.7,
+      "total_unavailability": 2.7,
+      "availability": 97.3
+    },
+    "ramp_trajectory": {
+      "11": 420,
+      "26": 518,
+      "41": 532
+    },
+    "defect_first_reported_shift_pct": 1.2,
+    "defect_final_shift_pct": 0.6,
+    "n_equipment_events": 10,
+    "n_network_events": 2,
+    "n_absence_events": 9
+  },
+  "ensemble": {
+    "throughput_units_per_shift_mean": 546.985,
+    "defect_rate_pct_mean": 0.8,
+    "uptime_pct_mean": 95.82650000000001,
+    "energy_kwh_mean": 32.755500000000005,
+    "throughput_units_per_shift_sd": 0.9973840784772936,
+    "defect_rate_pct_sd": 0.0,
+    "uptime_pct_sd": 0.8154432843552029,
+    "energy_kwh_sd": 0.23252903044566248,
+    "n_replications": 200
+  },
+  "published_table4": {
+    "throughput_units_per_shift": 547,
+    "defect_rate_pct": 0.8,
+    "uptime_pct": 95.8,
+    "energy_kwh": 32.7,
+    "nasa_tlx": 49,
+    "reba": 4.3,
+    "separation_violations": 0,
+    "min_separation_m": 0.18
+  },
+  "closed_form_prediction": {
+    "throughput_units_per_shift": 554,
+    "defect_rate_pct": 0.6,
+    "uptime_pct": 98.5,
+    "energy_kwh": 31.2,
+    "nasa_tlx": 46,
+    "reba": 4.1
+  }
+}

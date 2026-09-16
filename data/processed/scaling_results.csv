@@ -1,0 +1,6 @@
+N,throughput_simulated_units_per_shift,throughput_ideal_units_per_shift,efficiency_simulated_pct,efficiency_predicted_pct,fit_residual_pp,workspace_utilisation_pct,bandwidth_utilisation_pct,planning_latency_ms,dt_sync_mean_ms,dt_sync_p95_ms,dt_sync_max_ms,separation_fixed_m,separation_learned_cbf_m,separation_violations
+1,307,307,100.0,100.0,0.0,72,3.8,8.3,37,52,68,1.2,0.58,0
+2,554,614,90.3,93.1,-2.8,85,6.2,9.7,42,67,89,1.15,0.71,0
+3,802,921,87.1,85.6,1.5,78,10.1,11.4,48,74,103,1.22,0.79,0
+4,963,1228,78.4,77.5,0.9,67,15.8,14.2,51,78,115,1.19,0.8,0
+5,1047,1535,68.2,68.8,-0.6,62,22.3,16.8,54,82,127,1.18,0.81,0

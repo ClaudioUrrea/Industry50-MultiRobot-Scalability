@@ -1,0 +1,81 @@
+{
+  "N": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "throughput_simulated": [
+    307,
+    554,
+    802,
+    963,
+    1047
+  ],
+  "throughput_ideal": [
+    307,
+    614,
+    921,
+    1228,
+    1535
+  ],
+  "efficiency_simulated_pct": [
+    100.0,
+    90.3,
+    87.1,
+    78.4,
+    68.2
+  ],
+  "efficiency_predicted_pct": [
+    100.0,
+    93.1,
+    85.6,
+    77.5,
+    68.8
+  ],
+  "fit_residual_pp": [
+    0.0,
+    -2.8,
+    1.5,
+    0.9,
+    -0.6
+  ],
+  "rmse_pp": 1.5,
+  "beta_identified": 0.0659,
+  "gamma_identified": 0.00298,
+  "workspace_utilisation_pct": [
+    72,
+    85,
+    78,
+    67,
+    62
+  ],
+  "bandwidth_pct": [
+    3.8,
+    6.2,
+    10.1,
+    15.8,
+    22.3
+  ],
+  "latency_ms": [
+    8.3,
+    9.7,
+    11.4,
+    14.2,
+    16.8
+  ],
+  "marginal_gain_units": {
+    "2": 247,
+    "3": 248,
+    "4": 161,
+    "5": 84
+  },
+  "hours_simulated": 440,
+  "robot_hours": 1320,
+  "operator_hours": 440,
+  "separation_violations": 0,
+  "bottleneck": "workspace",
+  "bandwidth_saturation_N": 11.2,
+  "computation_budget_N": 6.3
+}

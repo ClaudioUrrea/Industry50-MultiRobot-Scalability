@@ -1,0 +1,37 @@
+configuration,pillar,indicator,value,unit,provenance
+manual,economic,Units per shift,228,units,simulated
+manual,economic,Direct labour,16.0,operator-h/shift,simulated
+manual,economic,Labour intensity,7.02,operator-h/100 units,simulated
+manual,economic,Defect rate,3.2,%,simulated
+manual,economic,Uptime,87.7,%,simulated
+manual,environmental,Energy,42.3,kWh/shift,simulated
+manual,environmental,Carbon,18.6,kg CO2/shift,simulated
+manual,environmental,Material waste,4.7,%,simulated
+manual,social,Satisfaction,3.2,/5.0,projected
+manual,social,Injuries,2.8,per 1000 h,projected
+manual,social,Sick days,4.9,%,projected
+manual,social,Turnover,18.6,%,projected
+i50_hrc,economic,Units per shift,554,units,simulated
+i50_hrc,economic,Direct labour,8.0,operator-h/shift,simulated
+i50_hrc,economic,Labour intensity,1.44,operator-h/100 units,simulated
+i50_hrc,economic,Defect rate,0.6,%,simulated
+i50_hrc,economic,Uptime,98.5,%,simulated
+i50_hrc,environmental,Energy,31.2,kWh/shift,simulated
+i50_hrc,environmental,Carbon,13.7,kg CO2/shift,simulated
+i50_hrc,environmental,Material waste,2.0,%,simulated
+i50_hrc,social,Satisfaction,4.6,/5.0,projected
+i50_hrc,social,Injuries,0.4,per 1000 h,projected
+i50_hrc,social,Sick days,2.0,%,projected
+i50_hrc,social,Turnover,5.9,%,projected
+automated,economic,Units per shift,612,units,simulated
+automated,economic,Direct labour,4.0,operator-h/shift,simulated
+automated,economic,Labour intensity,0.65,operator-h/100 units,simulated
+automated,economic,Defect rate,0.4,%,simulated
+automated,economic,Uptime,94.2,%,simulated
+automated,environmental,Energy,38.7,kWh/shift,simulated
+automated,environmental,Carbon,17.0,kg CO2/shift,simulated
+automated,environmental,Material waste,1.8,%,simulated
+automated,social,Satisfaction,2.8,/5.0,projected
+automated,social,Injuries,0.3,per 1000 h,projected
+automated,social,Sick days,3.8,%,projected
+automated,social,Turnover,22.4,%,projected
