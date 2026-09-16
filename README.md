@@ -30,12 +30,11 @@ from the constants and series in `src/industry50/config.py` and
 `scripts/p3_disruption_ensemble.py` runs it 500 times under independent seeds
 and produces the intervals and the sensitivity analysis reported in the paper.
 
-**The physics cannot be re-executed.** The CoppeliaSim scene files from which
-the *N* = 1–5 throughput, occupancy, latency, bandwidth and separation series
-were originally obtained were lost and are not recoverable. No copy exists,
-here or in the deposit. Those series are archived in `data/processed/` and are
-the input to everything above, but the model that generated them cannot be
-re-run by anyone. `docs/SIMULATION_SPEC.md` gives the full specification needed
+**The physics cannot be re-executed.** The CoppeliaSim scene files behind the
+*N* = 1–5 throughput, occupancy, latency, bandwidth and separation series are
+not available and are not part of the deposit. Those series are archived in
+`data/processed/` and are the input to everything above, but they are an input
+to the analysis rather than a reproducible output of it. `docs/SIMULATION_SPEC.md` gives the full specification needed
 to rebuild an equivalent twin, and `scripts/p3_campaign_runner.py` is written
 against that specification rather than against a particular scene.
 
@@ -92,7 +91,7 @@ figures/            the four figures of the paper, PDF and PNG
 tests/              42 unit tests
 ```
 
-## Verification campaign that the lost scenes would permit
+## Verification campaign that an instantiated twin would permit
 
 `scripts/p3_campaign_runner.py` implements the 3,970-run matrix specified in
 Table 10 of the paper: replication, range extension to *N* = 7, geometry and
@@ -103,9 +102,8 @@ it at a rebuilt twin. `scripts/p3_analysis_v7.py` consumes the output and emits
 the corresponding tables. `docs/RUN_PLAN.md` explains the order and what each
 block closes.
 
-None of it has been executed, because the twin is unavailable. It is deposited
-so that the protocol can be judged and, if anyone rebuilds an equivalent cell,
-executed.
+None of it has been executed. It is deposited so that the protocol can be
+judged and, if anyone instantiates an equivalent cell, executed.
 
 ## Human subjects
 

@@ -4,9 +4,9 @@
 
 Aligned with the revised manuscript. The substantive changes:
 
-**Provenance stated accurately.** The CoppeliaSim scene files were lost and are
-not recoverable. `MANIFEST.md` and `README.md` now say so, and the earlier
-listing of two archives that were never deposited has been removed. The
+**Provenance stated accurately.** The CoppeliaSim scene files are not available
+and are not part of the deposit. `MANIFEST.md` and `README.md` now say so, and
+the earlier listing of two archives that were never deposited has been removed. The
 distinction between recomputing derived quantities, which this repository does
 in full, and re-executing the physics, which is no longer possible, is stated
 at the top of the README.

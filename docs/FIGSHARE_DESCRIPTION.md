@@ -53,14 +53,15 @@ model is executable and seeded: the replication ensemble of five hundred
 realisations and the parameter sensitivity analysis reported in the paper are
 produced by running it, not read from a stored result.
 
-The CoppeliaSim scene files from which the one-to-five-robot throughput,
-occupancy, latency, bandwidth and separation series were originally obtained
-were lost and are not recoverable. No copy is held here or by the author. Those
-series are archived in full and are the input to the analysis, but the model
-that generated them cannot be re-run. The specification needed to rebuild an
-equivalent twin is included, and so is the complete verification protocol,
-3,970 runs across nine blocks, that a rebuilt twin would permit; that protocol
-has not been executed.
+Re-execution of the physics is not among them. The CoppeliaSim scene files
+behind the one-to-five-robot throughput, occupancy, latency, bandwidth and
+separation series are not available and are not part of this deposit, so those
+series are an input to the analysis rather than a reproducible output of it.
+What that costs is quantified in the article, which reports how large an error
+in the archived series would have to be before each conclusion changed. The
+specification needed to instantiate an equivalent twin is included, together
+with the verification protocol of 3,970 runs across nine blocks that such a
+twin would permit; that protocol has not been executed.
 
 **Files**
 
