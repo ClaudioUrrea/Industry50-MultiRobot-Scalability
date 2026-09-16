@@ -7,8 +7,7 @@ authors, licence and keyword fields as given.
 
 **Title**
 
-Industry 5.0 multi-robot scalability: code, archived series and verification
-protocol
+Industry50-MultiRobot-Scalability: Code, archived series and verification protocol
 
 **Authors**
 
