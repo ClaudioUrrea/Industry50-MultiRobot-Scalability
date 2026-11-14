@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
-IEEE Access Industry 5.0 Multi-Robot Architecture Paper - Figure Generation
-Scalable Multi-Robot Architecture with Digital Twin Integration
+Figure generation for
+
+  C. Urrea, "Simulation-Based Scalability Assessment of Multi-Robot Industry 5.0
+  Human-Centric Cells: Coordination-Efficiency Modeling, Bottleneck
+  Identification, and Triple-Bottom-Line Screening in a Physics-Based Digital
+  Twin," IEEE Access, 2026.
+
+Accepted 13 November 2026, manuscript Access-2026-47170.
 
 ALL DATA IN THIS SCRIPT ARE SIMULATION OUTPUTS.
 Every series plotted below was produced by the CoppeliaSim 4.10 / Unity 2022.3
@@ -10,22 +16,25 @@ built and no human participant took part in any measurement. Axis labels and
 titles must therefore read "simulated" / "predicted", never "actual",
 "measured" or "deployment".
 
+Every series below is reconciled against the accepted manuscript: Table 3
+(scaling), Table 9 (extended campaign) and Figure 1 of the article. Changing a
+value here without changing the corresponding table is an error.
+
 Author: Claudio Urrea
 Institution: University of Santiago of Chile
-Date: July 2026
----
-
+Version: v8, November 2026
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 from matplotlib import rcParams
 from matplotlib.ticker import AutoMinorLocator
 import warnings
 from pathlib import Path
 
-warnings.filterwarnings('ignore')
+# Suppress only the font-fallback notice emitted when TeX Gyre Termes is absent.
+# A blanket filter would also hide genuine errors.
+warnings.filterwarnings('ignore', message='findfont')
 
 # --- IEEE Access Typography ---
 _FONT_FAMILY = 'serif'
@@ -56,7 +65,7 @@ rcParams.update({
     'ytick.minor.width':  0.6,
     'axes.linewidth':     1.2,
     'savefig.dpi':        600,
-    'figure.autolayout':  True,
+    'figure.autolayout':  False,   # tight_layout() is called explicitly
     'pdf.fonttype':       42,
     'ps.fonttype':        42,
 })
@@ -78,8 +87,10 @@ MASTER = {
     'T':         np.array([307, 554, 802, 963, 1047]),
     'T1':        307,
     'eta_sim':   np.array([1.000, 0.903, 0.871, 0.784, 0.682]),
-    'beta':      0.066,
-    'gamma':     0.003,
+    # Unrounded least-squares coefficients of Eq. 3; the article quotes
+    # 0.066 and 0.003 in running text. Not plotted, retained for reference.
+    'beta':      0.0659,
+    'gamma':     0.00298,
 }
 MASTER['ideal'] = MASTER['N'] * MASTER['T1']
 MASTER['scale'] = MASTER['T'] / MASTER['T1']
@@ -89,7 +100,7 @@ class IEEEAccessFigures:
 
     def __init__(self, output_dir='figures_p3_IEEE'):
         self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(exist_ok=True)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def _save(self, name):
         base = self.output_dir / name
@@ -172,7 +183,7 @@ class IEEEAccessFigures:
         ax.plot(N_fit, fit, '--', color='gray', alpha=0.55, lw=2,
                 label=f'Linear fit: {slope:.2f} ms/robot')
         ax.axhline(100, color='red', ls=':', lw=2.2, alpha=0.7,
-                   label='100 ms threshold (exceeded by max. for N>=3)')
+                   label='100 ms threshold (exceeded by maximum for N \u2265 3)')
 
         ax.set_xlabel('Number of Robots (N)')
         ax.set_ylabel('Latency (ms)')
@@ -198,7 +209,7 @@ class IEEEAccessFigures:
         x = np.arange(len(N))
         w = 0.34
 
-        ax1.bar(x - w/2, trad,  w, label='Traditional',
+        ax1.bar(x - w/2, trad,  w, label='Fixed separation',
                 color=COLORS['quaternary'], alpha=0.82,
                 edgecolor='black', lw=1.2)
         ax1.bar(x + w/2, learn, w, label='Learned CBF',
@@ -217,8 +228,10 @@ class IEEEAccessFigures:
         ax1.set_ylabel('Average Separation (m)')
         ax1.set_title('Human-Robot Separation Distance', pad=12)
         ax1.set_xticks(x); ax1.set_xticklabels(N)
-        ax1.set_ylim([0, 1.60])
-        ax1.legend(fontsize=9)
+        # Headroom for the legend: matplotlib's 'best' placement avoids bars
+        # and lines but not ax.text() labels, which is what hid '1.20 m'.
+        ax1.set_ylim([0, 1.95])
+        ax1.legend(fontsize=9, loc='upper right', framealpha=0.95)
         ax1.grid(True, axis='y', alpha=0.30, linewidth=0.8)
 
         ax2.plot(x, red, 'o-', lw=3, ms=12, color=COLORS['primary'],
@@ -252,8 +265,9 @@ class IEEEAccessFigures:
         """
         metrics  = ['Throughput', 'Defect rate', 'Energy', 'Uptime']
         units    = ['units/shift', '%', 'kWh/shift', '%']
+        # Table 9 of the article, which this figure's caption cites.
         proj     = np.array([554,   0.6,  31.2,  98.5])   # undisrupted simulation
-        sim      = np.array([547,   0.8,  32.8,  95.9])   # disrupted campaign
+        sim      = np.array([547,   0.8,  32.8,  95.8])   # disrupted campaign
 
         # -- LEFT PANEL: Disrupted as % of nominal (undisrupted) simulation --
         pct_of_proj = (sim / proj) * 100
@@ -273,8 +287,12 @@ class IEEEAccessFigures:
                     label='\u00b110 % band')
 
         for i, (p, pr, ac) in enumerate(zip(pct_of_proj, proj, sim)):
+            # White background: the 100 % reference line crosses this label
+            # whenever a bar lands just below the nominal value.
             ax1.text(i, p + 2.5, f'{ac:g} / {pr:g}',
-                     ha='center', fontweight='bold', fontsize=9)
+                     ha='center', fontweight='bold', fontsize=9,
+                     bbox=dict(facecolor='white', edgecolor='none',
+                               boxstyle='square,pad=0.15'))
             ax1.text(i, min(p, 100) - 5, f'{p:.1f} %',
                      ha='center', fontweight='bold', fontsize=10,
                      color='white')
@@ -307,13 +325,13 @@ class IEEEAccessFigures:
         ax2.axvspan(-10, 10, alpha=0.15, color='green',
                     label='\u00b110 %')
 
-        for i, (re, ae, u) in enumerate(zip(rel_err, abs_err, units)):
-            sign_re = '+' if re > 0 else ''
+        for i, (rel, ae, u) in enumerate(zip(rel_err, abs_err, units)):
+            sign_rel = '+' if rel > 0 else ''
             sign_ae = '+' if ae > 0 else ''
-            label = f'{sign_re}{re:.1f} %  ({sign_ae}{ae:g} {u})'
-            offset = 1.5 if re >= 0 else -1.5
-            ha = 'left' if re >= 0 else 'right'
-            ax2.text(re + offset, i, label,
+            label = f'{sign_rel}{rel:.1f} %  ({sign_ae}{ae:g} {u})'
+            offset = 1.5 if rel >= 0 else -1.5
+            ha = 'left' if rel >= 0 else 'right'
+            ax2.text(rel + offset, i, label,
                      va='center', ha=ha,
                      fontweight='bold', fontsize=9)
 
@@ -334,9 +352,9 @@ class IEEEAccessFigures:
     # ------------------------------------------------------------------
     def generate_all(self):
         print("\n" + "=" * 70)
-        print("IEEE Access Industry 5.0 Paper - Figure Generation")
-        print("Scalable Multi-Robot Architecture with Digital Twin")
-        print("VERSION v5 - simulation framing; all series are digital-twin outputs")
+        print("IEEE Access - Simulation-Based Scalability Assessment")
+        print("Multi-Robot Industry 5.0 Human-Centric Cells (Access-2026-47170)")
+        print("VERSION v8 - all series are digital-twin outputs")
         print("=" * 70)
         print(f"\nOutput : {self.output_dir.absolute()}")
         print(f"Font   : {_FONT_SERIF[0]}\n")

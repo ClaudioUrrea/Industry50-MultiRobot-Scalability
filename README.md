@@ -5,7 +5,10 @@ Companion repository for
 > C. Urrea, "Simulation-Based Scalability Assessment of Multi-Robot Industry 5.0
 > Human-Centric Cells: Coordination-Efficiency Modeling, Bottleneck
 > Identification, and Triple-Bottom-Line Screening in a Physics-Based Digital
-> Twin," *IEEE Access*, 2026 (under review).
+> Twin," *IEEE Access*, 2026.
+
+Accepted 13 November 2026 (manuscript Access-2026-47170). The article DOI is
+added here once the Early Access version is posted.
 
 Data deposit: <https://doi.org/10.6084/m9.figshare.33090107>
 
@@ -32,15 +35,43 @@ and produces the intervals and the sensitivity analysis reported in the paper.
 
 **The physics cannot be re-executed.** The CoppeliaSim scene files behind the
 *N* = 1–5 throughput, occupancy, latency, bandwidth and separation series are
-not available and are not part of the deposit. Those series are archived in
-`data/processed/` and are the input to everything above, but they are an input
-to the analysis rather than a reproducible output of it. `docs/SIMULATION_SPEC.md` gives the full specification needed
+not available and are not part of this repository or of the deposit. Those
+series are archived in `data/processed/` and are the input to everything above,
+so they are an input to the analysis rather than a reproducible output of it. `docs/SIMULATION_SPEC.md` gives the full specification needed
 to rebuild an equivalent twin, and `scripts/p3_campaign_runner.py` is written
 against that specification rather than against a particular scene.
 
 The paper states this in its Data Availability Statement, quantifies what it
 costs in Section XI-C, and bounds the exposure in Section XI-D by reporting how
 large an error in the series would have to be before each conclusion changed.
+
+---
+
+## What the safety layer in this repository is, and is not
+
+Two points that a reader opening `src/` should not have to infer.
+
+**The velocity-scaling law is declarative, not on the reproduction path.**
+`ros2_bridge.CoordinationBridge.scale_velocity` implements the speed-and-
+separation rule described in the paper: zero below the 0.15 m design floor,
+linear between the floor and the 0.25 m margin, nominal above the margin. The
+module states in its own docstring that it is not required to reproduce any
+number in the article, every result being produced by `campaign.py`, which has
+no ROS dependency. Nothing in `src/`, `scripts/` or `tests/` calls it, and the
+constants `VELOCITY_NOMINAL_MS`, `VELOCITY_FLOOR_MS`, `COLLAB_VELOCITY_BAND_MS`
+and `SEPARATION_MARGIN_M` in `config.py` record the policy rather than drive a
+campaign. The article is explicit that admissibility of the learned policy's
+separations under the protective separation distance would require a velocity
+schedule tied to that distance, which this study did not implement and the
+campaigns did not measure.
+
+**The separation values of Figure 1 are stored campaign outputs.**
+`SEPARATION_FIXED_M` and `SEPARATION_LEARNED_CBF_M` in `config.py` are archived
+per-configuration results, not quantities computed by this code; their only
+consumer is `coordination.conservatism_reduction_pct`, which reports the
+percentage difference between them. The deposit records the minimum observed
+separation (0.18 m) and the violation count (zero), not a full separation
+distribution.
 
 ---
 
@@ -91,7 +122,7 @@ figures/            the four figures of the paper, PDF and PNG
 tests/              42 unit tests
 ```
 
-## Verification campaign that an instantiated twin would permit
+## Verification campaign that the lost scenes would permit
 
 `scripts/p3_campaign_runner.py` implements the 3,970-run matrix specified in
 Table 10 of the paper: replication, range extension to *N* = 7, geometry and
@@ -102,8 +133,9 @@ it at a rebuilt twin. `scripts/p3_analysis_v7.py` consumes the output and emits
 the corresponding tables. `docs/RUN_PLAN.md` explains the order and what each
 block closes.
 
-None of it has been executed. It is deposited so that the protocol can be
-judged and, if anyone instantiates an equivalent cell, executed.
+None of it has been executed, because the twin is unavailable. It is deposited
+so that the protocol can be judged and, if anyone rebuilds an equivalent cell,
+executed.
 
 ## Human subjects
 
@@ -124,3 +156,4 @@ by anything in this repository.
 ## Citation
 
 See `CITATION.cff`. Correspondence: claudio.urrea@usach.cl
+

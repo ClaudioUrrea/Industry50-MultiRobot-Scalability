@@ -45,7 +45,11 @@ DEPTH_CAMERA = "Intel RealSense D435i"
 DEPTH_CAMERA_HZ = 30
 COORDINATION_SERVER = "Intel Xeon E5-2690, 32 cores, 128 GB RAM"
 
-# Safety layer, ISO/TS 15066 speed and separation monitoring
+# Safety layer, ISO/TS 15066 speed and separation monitoring.
+# These five constants are DECLARATIVE: they record the policy described in the
+# article. Their only consumer is ros2_bridge.CoordinationBridge.scale_velocity,
+# which that module's docstring places outside the reproduction path and which
+# nothing in this package calls. No deposited campaign executed this schedule.
 SEPARATION_FLOOR_M = 0.15       # system design limit
 SEPARATION_MARGIN_M = 0.25      # velocity scaling begins here
 VELOCITY_NOMINAL_MS = 1.2
@@ -87,7 +91,11 @@ DT_LATENCY_P95_MS = {1: 52, 2: 67, 3: 74, 4: 78, 5: 82}
 DT_LATENCY_MAX_MS = {1: 68, 2: 89, 3: 103, 4: 115, 5: 127}
 DT_LATENCY_SLOPE_MS_PER_ROBOT = 4.25
 
-# Figure 1, separation policies
+# Figure 1, separation policies.
+# Archived campaign outputs, not computed here. Consumed only by
+# coordination.conservatism_reduction_pct, which reports their relative
+# difference. The deposit holds the minimum observed separation (0.18 m) and the
+# violation count, not a full per-cycle separation distribution.
 SEPARATION_FIXED_M = {1: 1.20, 2: 1.15, 3: 1.22, 4: 1.19, 5: 1.18}
 SEPARATION_LEARNED_CBF_M = {1: 0.58, 2: 0.71, 3: 0.79, 4: 0.80, 5: 0.81}
 

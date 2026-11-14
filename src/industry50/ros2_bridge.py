@@ -76,7 +76,15 @@ class CoordinationBridge(Node):                 # pragma: no cover
             f"budget {C.CONTROL_BUDGET_MS} ms")
 
     def scale_velocity(self, separation_m: float) -> float:
-        """ISO/TS 15066 speed and separation monitoring, Section IV."""
+        """ISO/TS 15066 speed and separation monitoring, Section IV.
+
+        Declarative. Nothing in this package calls this method, and no result in
+        the article was produced by it; see the module docstring above. It
+        returns the nominal velocity for any separation at or above the margin,
+        so it does not by itself deliver the speed reduction that the
+        velocity-dependent protective separation distance would require at the
+        separations plotted in Figure 1. The article states this.
+        """
         if separation_m <= self.separation_floor_m:
             return 0.0
         if separation_m >= self.separation_margin_m:

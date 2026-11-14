@@ -51,8 +51,19 @@ Table 3 (8.3 ms at N = 1 to 16.8 ms at N = 5) belong to that loop.
 
 Two policies were instrumented in parallel: the conservative fixed-separation SSM
 baseline, which governed the campaign, and a learned control-barrier-function
-variant evaluated offline against the same simulated sensor streams. The
-velocity-scaling law is implemented in `ros2_bridge.CoordinationBridge.scale_velocity`.
+variant evaluated offline against the same simulated sensor streams.
+
+The velocity-scaling law above is implemented in
+`ros2_bridge.CoordinationBridge.scale_velocity`, and that function sits outside
+the reproduction path by the module's own design: its docstring states that the
+module is not required to reproduce any number in the article, and nothing in
+`src/`, `scripts/` or `tests/` calls it. The table records the policy; it does
+not describe a schedule that any deposited campaign executed. The article is
+explicit on the consequence: the separations of the learned policy are reported
+as separation behaviour, and admissibility under the velocity-dependent
+protective separation distance would require a schedule tied to that distance,
+which this study did not implement and the campaigns, which recorded separation
+against the 0.15 m design floor, did not measure.
 
 ## Digital twin
 

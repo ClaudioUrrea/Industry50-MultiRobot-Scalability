@@ -34,7 +34,7 @@ Code, archived series and figures supporting the article "Simulation-Based
 Scalability Assessment of Multi-Robot Industry 5.0 Human-Centric Cells:
 Coordination-Efficiency Modeling, Bottleneck Identification, and
 Triple-Bottom-Line Screening in a Physics-Based Digital Twin" (IEEE Access,
-2026).
+2026; accepted 13 November 2026, manuscript Access-2026-47170).
 
 The study characterises how coordination efficiency degrades as collaborative
 robots are added to a 12 m2 human-centric assembly cell, across one to five
@@ -61,6 +61,16 @@ in the archived series would have to be before each conclusion changed. The
 specification needed to instantiate an equivalent twin is included, together
 with the verification protocol of 3,970 runs across nine blocks that such a
 twin would permit; that protocol has not been executed.
+
+Two further points are stated here rather than left to inspection of the code.
+The velocity-scaling law of the safety layer is implemented in the ROS 2 bridge
+module, which states in its own docstring that it is not required to reproduce
+any number in the article; nothing in the package calls it, and the velocity
+constants record the policy rather than drive a campaign. And the separation
+values behind Figure 1 are archived campaign outputs consumed only by the
+routine that reports the percentage difference between the two policies: the
+deposit holds the minimum observed separation and the violation count, not a
+full separation distribution.
 
 **Files**
 

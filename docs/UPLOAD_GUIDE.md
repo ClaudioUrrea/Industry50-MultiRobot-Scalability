@@ -1,11 +1,37 @@
-# Upload guide
+# Upload guide — accepted version (v2.1)
 
-Both targets already exist and both are to be emptied and repopulated:
+The article was accepted by IEEE Access on 13 November 2026 as manuscript
+Access-2026-47170. This round is an UPDATE of both targets, not a wipe: the
+code and the archived series are unchanged, only the documentation and two
+explanatory code comments differ, so history should be preserved.
 
 - GitHub: <https://github.com/ClaudioUrrea/Industry50-MultiRobot-Scalability>
 - Figshare: <https://doi.org/10.6084/m9.figshare.33090107>
 
-Do GitHub first; the Figshare description links to it.
+What changed in v2.1: README, CHANGELOG, MANIFEST, CITATION.cff,
+docs/SIMULATION_SPEC.md, docs/MAPPING_PAPER_TO_CODE.md, docs/DATA_DICTIONARY.md
+and the Figshare description now state that the velocity-scaling law is
+declarative and outside the reproduction path, that the Figure 1 separation
+values are archived campaign outputs, and that the deposit holds the minimum
+separation and the violation count rather than a full distribution. Explanatory
+comments saying the same were added to `src/industry50/config.py` and
+`src/industry50/ros2_bridge.py`.
+
+## GitHub
+
+```bash
+git add -A
+git commit -m "v2.1: accepted version (Access-2026-47170); state provenance of the safety-layer constants"
+git tag -a v2.1 -m "Accepted version, IEEE Access, November 2026"
+git push origin main --tags
+```
+
+## Figshare
+
+Upload the five files in `02. Figshare/` as a NEW VERSION of the existing item,
+replacing the files of the previous version. The base DOI keeps resolving to the
+latest version, so the reference in the article stays valid. Then paste the body
+of `FIGSHARE_DESCRIPTION.md` into the description field.
 
 ## 0. Verify before touching either
 

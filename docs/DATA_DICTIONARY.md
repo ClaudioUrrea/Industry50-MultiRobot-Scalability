@@ -60,3 +60,12 @@ Performance–complexity trade-off across N = 1..5, matching Table 5.
 Identified coefficients, RMSE, campaign accounting (440 h, 1 320 robot-hours,
 440 operator-hours), the bottleneck verdict, and the two projected ceilings
 (bandwidth saturation near N ≈ 11, computation budget exhausted near N ≈ 6).
+
+## Provenance note on the separation columns
+
+`separation_fixed_m` and `separation_learned_cbf_m` are archived per-
+configuration campaign outputs read from `config.py`, not quantities computed by
+this code; their only consumer is `coordination.conservatism_reduction_pct`.
+`separation_violations` is a count against the 0.15 m design floor, and
+`campaign_summary.json` records the minimum observed separation (0.18 m)
+alongside it. No full per-cycle separation distribution is deposited.

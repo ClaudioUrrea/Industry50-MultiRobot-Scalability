@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
-IEEE Access Industry 5.0 Multi-Robot Architecture Paper - Figure Generation
-Scalable Multi-Robot Architecture with Digital Twin Integration
+Figure generation for
+
+  C. Urrea, "Simulation-Based Scalability Assessment of Multi-Robot Industry 5.0
+  Human-Centric Cells: Coordination-Efficiency Modeling, Bottleneck
+  Identification, and Triple-Bottom-Line Screening in a Physics-Based Digital
+  Twin," IEEE Access, 2026.
+
+Accepted 13 November 2026, manuscript Access-2026-47170.
 
 ALL DATA IN THIS SCRIPT ARE SIMULATION OUTPUTS.
 Every series plotted below was produced by the CoppeliaSim 4.10 / Unity 2022.3
@@ -10,22 +16,25 @@ built and no human participant took part in any measurement. Axis labels and
 titles must therefore read "simulated" / "predicted", never "actual",
 "measured" or "deployment".
 
+Every series below is reconciled against the accepted manuscript: Table 3
+(scaling), Table 9 (extended campaign) and Figure 1 of the article. Changing a
+value here without changing the corresponding table is an error.
+
 Author: Claudio Urrea
 Institution: University of Santiago of Chile
-Date: July 2026
----
-
+Version: v8, November 2026
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 from matplotlib import rcParams
 from matplotlib.ticker import AutoMinorLocator
 import warnings
 from pathlib import Path
 
-warnings.filterwarnings('ignore')
+# Suppress only the font-fallback notice emitted when TeX Gyre Termes is absent.
+# A blanket filter would also hide genuine errors.
+warnings.filterwarnings('ignore', message='findfont')
 
 # --- IEEE Access Typography ---
 _FONT_FAMILY = 'serif'
@@ -56,7 +65,7 @@ rcParams.update({
     'ytick.minor.width':  0.6,
     'axes.linewidth':     1.2,
     'savefig.dpi':        600,
-    'figure.autolayout':  True,
+    'figure.autolayout':  False,   # tight_layout() is called explicitly
     'pdf.fonttype':       42,
     'ps.fonttype':        42,
 })
@@ -78,8 +87,10 @@ MASTER = {
     'T':         np.array([307, 554, 802, 963, 1047]),
     'T1':        307,
     'eta_sim':   np.array([1.000, 0.903, 0.871, 0.784, 0.682]),
-    'beta':      0.066,
-    'gamma':     0.003,
+    # Unrounded least-squares coefficients of Eq. 3; the article quotes
+    # 0.066 and 0.003 in running text. Not plotted, retained for reference.
+    'beta':      0.0659,
+    'gamma':     0.00298,
 }
 MASTER['ideal'] = MASTER['N'] * MASTER['T1']
 MASTER['scale'] = MASTER['T'] / MASTER['T1']
@@ -89,7 +100,7 @@ class IEEEAccessFigures:
 
     def __init__(self, output_dir='figures_p3_IEEE'):
         self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(exist_ok=True)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def _save(self, name):
         base = self.output_dir / name
@@ -172,7 +183,7 @@ class IEEEAccessFigures:
         ax.plot(N_fit, fit, '--', color='gray', alpha=0.55, lw=2,
                 label=f'Linear fit: {slope:.2f} ms/robot')
         ax.axhline(100, color='red', ls=':', lw=2.2, alpha=0.7,
-                   label='100 ms threshold (exceeded by max. for N>=3)')
+                   label='100 ms threshold (exceeded by maximum for N \u2265 3)')
 
         ax.set_xlabel('Number of Robots (N)')
         ax.set_ylabel('Latency (ms)')
@@ -198,14 +209,16 @@ class IEEEAccessFigures:
         x = np.arange(len(N))
         w = 0.34
 
-        ax1.bar(x - w/2, trad,  w, label='Traditional',
+        ax1.bar(x - w/2, trad,  w, label='Fixed separation',
                 color=COLORS['quaternary'], alpha=0.82,
                 edgecolor='black', lw=1.2)
         ax1.bar(x + w/2, learn, w, label='Learned CBF',
                 color=COLORS['tertiary'],  alpha=0.82,
                 edgecolor='black', lw=1.2)
         ax1.axhline(0.15, color='blue', ls=':', lw=2.5,
-                    label='ISO min (0.15 m)')
+                    label='Design floor (0.15 m)')
+        ax1.axhline(0.98, color='purple', ls='-.', lw=2.0, alpha=0.8,
+                    label='PSD at 1.2 m/s (0.98 m)')
         for i, (t, l) in enumerate(zip(trad, learn)):
             ax1.text(i - w/2, t + 0.03, f'{t:.2f} m', ha='center',
                      fontweight='bold', fontsize=9.5)
@@ -215,8 +228,10 @@ class IEEEAccessFigures:
         ax1.set_ylabel('Average Separation (m)')
         ax1.set_title('Human-Robot Separation Distance', pad=12)
         ax1.set_xticks(x); ax1.set_xticklabels(N)
-        ax1.set_ylim([0, 1.60])
-        ax1.legend(fontsize=9)
+        # Headroom for the legend: matplotlib's 'best' placement avoids bars
+        # and lines but not ax.text() labels, which is what hid '1.20 m'.
+        ax1.set_ylim([0, 1.95])
+        ax1.legend(fontsize=9, loc='upper right', framealpha=0.95)
         ax1.grid(True, axis='y', alpha=0.30, linewidth=0.8)
 
         ax2.plot(x, red, 'o-', lw=3, ms=12, color=COLORS['primary'],
@@ -237,21 +252,24 @@ class IEEEAccessFigures:
         self._save('Fig1_Safety_Performance')
 
     # ------------------------------------------------------------------
-    # Figure 4: Campaign validation (closed-form model vs. simulated campaign)
+    # Figure 4: Disrupted campaign vs. undisrupted simulation (N = 2)
     # NOTE: Payback metric removed — cost modelling deferred to companion study.
     # ------------------------------------------------------------------
-    def fig4_campaign_validation(self):
+    def fig4_disruption_comparison(self):
         """
-        Closed-form model vs. extended 60-shift simulated campaign (N = 2).
-        Left panel:  Simulated / Predicted ratio (all metrics on ~100% scale)
+        Disrupted 60-shift campaign vs. the undisrupted N = 2 simulation.
+        Left panel:  Disrupted / nominal ratio (all metrics on ~100% scale)
         Right panel: Relative deviation (%) with absolute annotations
+        Both panels compare two simulation conditions; neither is an
+        experimental validation and neither uses the closed-form prediction.
         """
         metrics  = ['Throughput', 'Defect rate', 'Energy', 'Uptime']
         units    = ['units/shift', '%', 'kWh/shift', '%']
-        proj     = np.array([554,   0.6,  31.2,  98.5])   # closed-form model
-        sim      = np.array([547,   0.8,  32.7,  95.8])   # simulated campaign
+        # Table 9 of the article, which this figure's caption cites.
+        proj     = np.array([554,   0.6,  31.2,  98.5])   # undisrupted simulation
+        sim      = np.array([547,   0.8,  32.8,  95.8])   # disrupted campaign
 
-        # -- LEFT PANEL: Simulated as % of Predicted --
+        # -- LEFT PANEL: Disrupted as % of nominal (undisrupted) simulation --
         pct_of_proj = (sim / proj) * 100
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5.2))
@@ -264,27 +282,31 @@ class IEEEAccessFigures:
         ax1.bar(x, pct_of_proj, width=0.6, color=bar_cols_L,
                 alpha=0.82, edgecolor='black', linewidth=1.2)
         ax1.axhline(100, color='black', ls='--', lw=2,
-                    label='Projected (100 %)')
+                    label='Nominal simulation (100 %)')
         ax1.axhspan(90, 110, alpha=0.15, color='green',
                     label='\u00b110 % band')
 
         for i, (p, pr, ac) in enumerate(zip(pct_of_proj, proj, sim)):
+            # White background: the 100 % reference line crosses this label
+            # whenever a bar lands just below the nominal value.
             ax1.text(i, p + 2.5, f'{ac:g} / {pr:g}',
-                     ha='center', fontweight='bold', fontsize=9)
+                     ha='center', fontweight='bold', fontsize=9,
+                     bbox=dict(facecolor='white', edgecolor='none',
+                               boxstyle='square,pad=0.15'))
             ax1.text(i, min(p, 100) - 5, f'{p:.1f} %',
                      ha='center', fontweight='bold', fontsize=10,
                      color='white')
 
         ax1.set_xticks(x)
         ax1.set_xticklabels(bar_labels, fontsize=9)
-        ax1.set_ylabel('Simulated / Predicted (\u00d7 100 %)')
-        ax1.set_title('Closed-Form Model vs. Simulated Campaign\n'
-                      '60 Shifts under Stochastic Disruption (N = 2)', pad=12)
+        ax1.set_ylabel('Disrupted / Nominal Simulation (\u00d7 100 %)')
+        ax1.set_title('Disrupted vs. Undisrupted Simulation\n'
+                      '60 Shifts, N = 2, per Station', pad=12)
         ax1.set_ylim([0, 145])
         ax1.legend(loc='upper right', fontsize=8.5)
         ax1.grid(True, axis='y', alpha=0.30, linewidth=0.8)
 
-        # -- RIGHT PANEL: Relative prediction error (%) --
+        # -- RIGHT PANEL: Relative deviation from the nominal simulation (%) --
         rel_err = ((sim - proj) / proj) * 100
         abs_err = sim - proj
 
@@ -303,36 +325,36 @@ class IEEEAccessFigures:
         ax2.axvspan(-10, 10, alpha=0.15, color='green',
                     label='\u00b110 %')
 
-        for i, (re, ae, u) in enumerate(zip(rel_err, abs_err, units)):
-            sign_re = '+' if re > 0 else ''
+        for i, (rel, ae, u) in enumerate(zip(rel_err, abs_err, units)):
+            sign_rel = '+' if rel > 0 else ''
             sign_ae = '+' if ae > 0 else ''
-            label = f'{sign_re}{re:.1f} %  ({sign_ae}{ae:g} {u})'
-            offset = 1.5 if re >= 0 else -1.5
-            ha = 'left' if re >= 0 else 'right'
-            ax2.text(re + offset, i, label,
+            label = f'{sign_rel}{rel:.1f} %  ({sign_ae}{ae:g} {u})'
+            offset = 1.5 if rel >= 0 else -1.5
+            ha = 'left' if rel >= 0 else 'right'
+            ax2.text(rel + offset, i, label,
                      va='center', ha=ha,
                      fontweight='bold', fontsize=9)
 
         ax2.set_yticks(x)
         ax2.set_yticklabels(bar_labels, fontsize=9)
-        ax2.set_xlabel('Relative Deviation from Closed-Form Model (%)')
-        ax2.set_title('Contribution of the Disruption Model\n'
-                      '(% of predicted value)', pad=12)
+        ax2.set_xlabel('Relative Deviation from Nominal Simulation (%)')
+        ax2.set_title('Cost of the Disruption Model\n'
+                      '(% of the undisrupted value)', pad=12)
         ax2.legend(loc='upper right', fontsize=8.5)
         ax2.grid(True, axis='x', alpha=0.30, linewidth=0.8)
         ax2.set_xlim([-19.5, 49.5])
 
         plt.tight_layout()
-        self._save('Fig4_Experimental_Validation')
+        self._save('Fig4_Disruption_Comparison')
 
     # ------------------------------------------------------------------
     # Run all
     # ------------------------------------------------------------------
     def generate_all(self):
         print("\n" + "=" * 70)
-        print("IEEE Access Industry 5.0 Paper - Figure Generation")
-        print("Scalable Multi-Robot Architecture with Digital Twin")
-        print("VERSION v5 - simulation framing; all series are digital-twin outputs")
+        print("IEEE Access - Simulation-Based Scalability Assessment")
+        print("Multi-Robot Industry 5.0 Human-Centric Cells (Access-2026-47170)")
+        print("VERSION v8 - all series are digital-twin outputs")
         print("=" * 70)
         print(f"\nOutput : {self.output_dir.absolute()}")
         print(f"Font   : {_FONT_SERIF[0]}\n")
@@ -341,7 +363,7 @@ class IEEEAccessFigures:
             ('Fig 1: Safety Performance',         self.fig1_safety_performance),
             ('Fig 2: Throughput Scaling',         self.fig2_throughput_scaling),
             ('Fig 3: Latency Scaling',            self.fig3_latency_scaling),
-            ('Fig 4: Campaign Validation',        self.fig4_campaign_validation),
+            ('Fig 4: Disruption Comparison',      self.fig4_disruption_comparison),
         ]
 
         for i, (name, func) in enumerate(figs, 1):
